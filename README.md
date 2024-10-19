@@ -8,4 +8,4 @@ cargo run -- test_server # locally hosted website (testing.rs)
 cargo run # bot
 ```
 ### custom website
-- You'll have to swap out the URLs in **`user_info.rs`** & **`testing.rs`**, and then run the commands above
+- You'll have to swap out the URLs in **`user_info.rs`** & **`testing.rs`**, and then follow the instructions above
