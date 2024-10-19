@@ -1,4 +1,4 @@
-# authbot
+# axyl-manager
 Discord bot for authentication & profile sharing between websites
 
 ## usage
