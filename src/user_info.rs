@@ -1,10 +1,10 @@
 use reqwest::Error;
 use serde::Serialize;
-use serenity::model::user::User;
+use serenity::{all::UserId, model::user::User};
 
 #[derive(Serialize)]
 pub struct UserInfo {
-    pub id: u64,
+    pub id: UserId,
     pub username: String,
     pub avatar_url: Option<String>,
 }
@@ -12,14 +12,17 @@ pub struct UserInfo {
 impl From<&User> for UserInfo {
     fn from(user: &User) -> Self {
         UserInfo {
-            id: user.id.0,
+            id: user.id,
             username: user.name.clone(),
             avatar_url: user.avatar_url(),
         }
     }
 }
 
-pub async fn fetch_user_info(ctx: &serenity::prelude::Context, user_id: u64) -> Option<UserInfo> {
+pub async fn fetch_user_info(
+    ctx: &serenity::prelude::Context,
+    user_id: UserId,
+) -> Option<UserInfo> {
     if let Ok(user) = ctx.http.get_user(user_id).await {
         Some(UserInfo::from(&user))
     } else {
