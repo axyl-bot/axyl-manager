@@ -1,10 +1,10 @@
 [package]
-name = "authbot"
+name = "axyl_manager"
 version = "0.1.0"
 authors = ["Nyx <nnyyxxxx@protonmail.com>", "Adam Perkowski <adas1per@protonmail.com>", "AxylOS <lead@axylprojects.dev>"]
 license = "GPL-2.0"
 description = "Discord bot for authentication & profile sharing between websites"
-repository = "https://github.com/nnyyxxxx/authbot.git"
+repository = "https://github.com/axyl-bots/axyl-manager.git"
 readme = "readme.md"
 keywords = [
     "discord",
@@ -12,7 +12,6 @@ keywords = [
     "authentication",
     "profile",
 ]
-categories = ["gui"]
 edition = "2021"
 
 [dependencies]
