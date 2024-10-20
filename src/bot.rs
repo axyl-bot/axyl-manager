@@ -1,17 +1,20 @@
-use crate::auth::authenticate_user;
-use crate::user_info::{fetch_user_info, send_user_info};
-use serenity::all::{
-    ActivityData, CreateCommand, CreateInteractionResponse, CreateInteractionResponseMessage,
-    Interaction,
+use crate::{
+    auth::authenticate_user,
+    user_info::{fetch_user_info, send_user_info},
 };
-use serenity::model::gateway::Ready;
-use serenity::model::id::GuildId;
-use serenity::model::user::OnlineStatus;
-use serenity::prelude::*;
+use serenity::{
+    all::{
+        ActivityData, Command, CreateCommand, CreateInteractionResponse,
+        CreateInteractionResponseMessage, GatewayIntents, Interaction,
+    },
+    async_trait,
+    model::{gateway::Ready, user::OnlineStatus},
+    prelude::*,
+};
 
 struct Handler;
 
-#[serenity::async_trait]
+#[async_trait]
 impl EventHandler for Handler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::Command(command) = interaction {
@@ -56,22 +59,20 @@ impl EventHandler for Handler {
             OnlineStatus::DoNotDisturb,
         );
 
-        let guild_id = GuildId::new(
-            std::env::var("GUILD_ID")
-                .expect("Expected guild id in environment")
-                .parse()
-                .expect("Invalid guild id"),
-        );
+        if let Err(why) = Command::set_global_commands(&ctx.http, vec![]).await {
+            println!("Failed to delete global commands: {:?}", why);
+            return;
+        }
 
-        let commands = GuildId::create_command(
-            guild_id,
-            &ctx.http,
-            CreateCommand::new("authenticate").description("Authenticate with the bot"),
-        )
-        .await
-        .expect("Failed to create command");
+        println!("Deleted all existing global commands.");
 
-        println!("Created command: {:#?}", commands);
+        let commands =
+            vec![CreateCommand::new("authenticate").description("Authenticate with the bot")];
+
+        match Command::set_global_commands(&ctx.http, commands).await {
+            Ok(cmds) => println!("Successfully registered {} global commands", cmds.len()),
+            Err(why) => println!("Failed to register global commands: {:?}", why),
+        }
     }
 }
 

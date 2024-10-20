@@ -1,5 +1,4 @@
-use serenity::model::id::UserId;
-use serenity::prelude::*;
+use serenity::{model::id::UserId, prelude::*};
 
 pub async fn authenticate_user(ctx: &Context, user_id: UserId) -> bool {
     if let Ok(guilds) = ctx.http.get_guilds(None, None).await {
