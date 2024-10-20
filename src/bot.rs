@@ -55,7 +55,10 @@ impl EventHandler for Handler {
         println!("{} is connected!", ready.user.name);
 
         ctx.set_presence(
-            Some(ActivityData::streaming("twitch.tv/axylprojects", "https://twitch.tv/axylprojects").expect("Failed to create streaming activity")),
+            Some(
+                ActivityData::streaming("twitch.tv/axylprojects", "https://twitch.tv/axylprojects")
+                    .expect("Failed to create streaming activity"),
+            ),
             OnlineStatus::DoNotDisturb,
         );
 
