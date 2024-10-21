@@ -62,9 +62,20 @@ impl EventHandler for Handler {
             OnlineStatus::DoNotDisturb,
         );
 
-        if let Err(why) = Command::set_global_commands(&ctx.http, vec![]).await {
-            println!("Failed to delete global commands: {:?}", why);
-            return;
+        match Command::get_global_commands(&ctx.http).await {
+            Ok(commands) => {
+                for command in commands {
+                    if let Err(why) = Command::delete_global_command(&ctx.http, command.id).await {
+                        println!(
+                            "Failed to delete global command {}: {:?}",
+                            command.name, why
+                        );
+                    } else {
+                        println!("Deleted global command: {}", command.name);
+                    }
+                }
+            }
+            Err(why) => println!("Failed to get global commands: {:?}", why),
         }
 
         println!("Deleted all existing global commands.");
